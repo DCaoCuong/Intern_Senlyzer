@@ -2,16 +2,26 @@ import Modal from './ui/modal'
 import Cart from './ui/cart'
 import Carousel from './carousel'
 
+// export default function Page() {
+//   // return (
+//   //   <Modal>
+//   //     <Cart />
+//   //   </Modal>
+//   // )
+//   return (
+//     <div>
+//       <p>View the picture</p>
+//       <Carousel />
+//     </div>
+//   )
+// }
+
 export default function Page() {
-  // return (
-  //   <Modal>
-  //     <Cart />
-  //   </Modal>
-  // )
-  return (
-    <div>
-      <p>View the picture</p>
-      <Carousel />
-    </div>
-  )
+  // Server Action
+  async function createPost(formData: FormData) {
+    'use server'
+    // ...
+  }
+ 
+  return <></>
 }
