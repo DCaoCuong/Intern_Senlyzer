@@ -23,54 +23,57 @@ import Link from 'next/link'
 
 export default function Page() {
   return (
-    <main className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 p-8">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Learn NextJS nàooo</h1>
-          <p className="text-gray-600">Data Fetching & Mutations Practice</p>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      {/* Header */}
+      <header className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 py-6">
+          <h1 className="text-4xl font-bold text-gray-900">Learn NextJS nàoooo</h1>
+          <p className="text-gray-600 mt-2">Data Fetching & Mutations Practice</p>
         </div>
+      </header>
 
-        {/* Navigation Links */}
-        <div className="mb-12 p-6 bg-white rounded-lg shadow">
-          <h2 className="text-xl font-semibold mb-4">** Navigation</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Link href="/blog" className="p-3 bg-blue-50 hover:bg-blue-100 rounded text-center font-medium text-blue-600 transition">
+      <main className="max-w-7xl mx-auto px-4 py-8 space-y-8">
+        {/* Navigation */}
+        <section className="bg-white rounded-lg shadow-md p-6">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-800">** Navigation</h2>
+          <div className="flex flex-wrap gap-3">
+            <Link href="/blog" className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
               Blog Posts
             </Link>
-            <Link href="/dashboard" className="p-3 bg-green-50 hover:bg-green-100 rounded text-center font-medium text-green-600 transition">
+            <Link href="/dashboard" className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
               Dashboard
             </Link>
-            <Link href="/item/1" className="p-3 bg-purple-50 hover:bg-purple-100 rounded text-center font-medium text-purple-600 transition">
+            <Link href="/item/1" className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition">
               Item Detail
             </Link>
-            <Link href="/artist/john" className="p-3 bg-pink-50 hover:bg-pink-100 rounded text-center font-medium text-pink-600 transition">
+            <Link href="/artist/drake" className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition">
               Artist Profile
             </Link>
           </div>
-        </div>
+        </section>
 
-        {/* View Count Section */}
-        <div className="mb-12 p-6 bg-white rounded-lg shadow">
-          <h2 className="text-xl font-semibold mb-4">* View Counter (useTransition + Server Action)</h2>
-          <ViewCount initialViews={0} />
+        {/* View Counter */}
+        <section className="bg-white rounded-lg shadow-md p-6">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-800">* View Counter (useTransition + Server Action)</h2>
+          <ViewCount initialViews={0}/>
           <p className="text-sm text-gray-500 mt-2">Counter increments automatically on page load using Server Actions</p>
-        </div>
+        </section>
 
-        {/* Form Section - useActionState */}
-        <div className="mb-12 p-6 bg-white rounded-lg shadow">
-          <h2 className="text-xl font-semibold mb-4">* Create Post (useActionState)</h2>
-          <p className="text-sm text-gray-600 mb-4">This form uses useActionState hook for better UX</p>
-          <Button />
-        </div>
+        {/* Forms */}
+        <div className="grid md:grid-cols-2 gap-6">
+          <section className="bg-white rounded-lg shadow-md p-6">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-800">* Create Post (useActionState)</h2>
+            <p className="text-sm text-gray-600 mb-4">This form uses useActionState hook for better UX</p>
+            <Button />
+          </section>
 
-        {/* Form Section - useState */}
-        <div className="mb-12 p-6 bg-white rounded-lg shadow">
-          <h2 className="text-xl font-semibold mb-4">* Create Post (useState)</h2>
-          <p className="text-sm text-gray-600 mb-4">This form uses simple useState for state management</p>
-          <PostForm />
+          <section className="bg-white rounded-lg shadow-md p-6">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-800">* Create Post (useState)</h2>
+            <p className="text-sm text-gray-600 mb-4">This form uses simple useState for state management</p>
+            <PostForm />
+          </section>
         </div>
-      </div>
-    </main>
+      </main>
+    </div>
   )
 }
