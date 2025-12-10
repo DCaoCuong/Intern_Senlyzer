@@ -48,7 +48,7 @@ export default function Button() {
             <span>Đang xử lý...</span>
           </>
         ) : (
-          '✨ Tạo bài viết'
+          ' Tạo >>'
         )}
       </button>
 
