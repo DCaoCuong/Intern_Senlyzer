@@ -1,7 +1,7 @@
 'use client'
  
 import { useState } from 'react'
-import { Carousel } from 'acme-carousel'
+import Carousel from '@/app/ui/carousel'
  
 export default function Gallery() {
   const [isOpen, setIsOpen] = useState(false)

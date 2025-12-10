@@ -23,12 +23,18 @@
 //     slug: post.slug,
 //   }))
 // }
+type Post = {
+  slug: string
+  title?: string
+  content?: string
+}
+
 
 export async function generateStaticParams() {
-  const posts = await fetch('https://.../posts').then((res) => res.json())
- 
-  // Render the first 10 posts at build time
-  return posts.slice(0, 10).map((post) => ({
+  const posts: Post[] = await fetch('https://.../posts').then((res) => res.json())
+  
+  //render trước 10 poster khi có request đã
+  return posts.slice(0, 10).map((post: Post) => ({
     slug: post.slug,
   }))
 }

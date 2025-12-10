@@ -1,22 +1,24 @@
 'use client'
- 
-import { incrementLike } from './actions'
+
 import { useState } from 'react'
- 
-export default function LikeButton({ initialLikes }: { initialLikes: number }) {
-  const [likes, setLikes] = useState(initialLikes)
- 
+
+export function LikeButton({ postId }: { postId: string }) {
+  const [likes, setLikes] = useState(0)
+  const [isLiked, setIsLiked] = useState(false)
+
+  const handleClick = () => {
+    setIsLiked(!isLiked)
+    setLikes(isLiked ? likes - 1 : likes + 1)
+  }
+
   return (
-    <>
-      <p>Total Likes: {likes}</p>
-      <button
-        onClick={async () => {
-          const updatedLikes = await incrementLike()
-          setLikes(updatedLikes)
-        }}
-      >
-        Like
-      </button>
-    </>
+    <button
+      onClick={handleClick}
+      className={`px-4 py-2 rounded ${
+        isLiked ? 'bg-red-500 text-white' : 'bg-gray-200'
+      }`}
+    >
+      {isLiked ? 'A' : 'B'} {likes}
+    </button>
   )
 }

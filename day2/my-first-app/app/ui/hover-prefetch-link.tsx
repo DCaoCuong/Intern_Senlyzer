@@ -1,22 +1,31 @@
 'use client'
  
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
  
-function HoverPrefetchLink({
+export default function HoverPrefetchLink({
   href,
   children,
 }: {
   href: string
   children: React.ReactNode
 }) {
-  const [active, setActive] = useState(false)
- 
+  const router = useRouter()
+  const [isHovered, setIsHovered] = useState(false)
+
+  // Khi hover vào link, prefetch trang trước
+  const handleMouseEnter = () => {
+    setIsHovered(true)
+    router.prefetch(href) // load trước dữ liệu của trang
+  }
+
   return (
-    <Link
+    <Link 
       href={href}
-      prefetch={active ? null : false}
-      onMouseEnter={() => setActive(true)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={() => setIsHovered(false)}
+      className={isHovered ? 'text-blue-600' : 'text-blue-500'}
     >
       {children}
     </Link>

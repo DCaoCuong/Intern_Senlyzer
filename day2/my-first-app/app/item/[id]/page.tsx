@@ -1,4 +1,4 @@
-import { getItem, checkIsAvailable } from '@/lib/data'
+import { getItem, checkIsAvailable } from '@/app/lib/data'
  
 export default async function Page({
   params,
@@ -15,12 +15,17 @@ export default async function Page({
 }
  
 const preload = (id: string) => {
-  // void evaluates the given expression and returns undefined
-  // https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/void
   void getItem(id)
 }
  
 export async function Item({ id }: { id: string }) {
   const result = await getItem(id)
-  // ...
+  
+  return (
+    <div>
+      <h1>Item: {id}</h1>
+      {/* Render data từ result */}
+      <pre>{JSON.stringify(result, null, 2)}</pre>
+    </div>
+  )
 }

@@ -69,25 +69,24 @@
 //   )
 // }
 
-// - Streaming
-import { Suspense } from 'react'
-import BlogList from '@/components/BlogList'
-import BlogListSkeleton from '@/components/BlogListSkeleton'
- 
-export default function BlogPage() {
+export async function generateStaticParams() {
+  return [
+    { slug: 'bai-viet-1' },
+    { slug: 'bai-viet-2' },
+  ]
+}
+
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
+  const { slug } = await params
+  
   return (
     <div>
-      {/* This content will be sent to the client immediately */}
-      <header>
-        <h1>Welcome to the Blog</h1>
-        <p>Read the latest posts below.</p>
-      </header>
-      <main>
-        {/* If there's any dynamic content inside this boundary, it will be streamed in */}
-        <Suspense fallback={<BlogListSkeleton />}>
-          <BlogList />
-        </Suspense>
-      </main>
+      <h1>Blog Post: {slug}</h1>
+      <p>Nội dung bài viết veeeef {slug}</p>
     </div>
   )
 }

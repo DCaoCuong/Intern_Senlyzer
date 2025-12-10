@@ -1,5 +1,5 @@
-import LikeButton from '@/app/ui/like-button'
-import { getPost } from '@/lib/data'
+import { LikeButton } from '@/app/ui/like-button'
+import { getPost } from '@/app/lib/data'
  
 export default async function Page({
   params,
@@ -9,5 +9,5 @@ export default async function Page({
   const { id } = await params
   const post = await getPost(id)
  
-  return <LikeButton likes={post.likes} />
+  return <LikeButton postId={id} />
 }
