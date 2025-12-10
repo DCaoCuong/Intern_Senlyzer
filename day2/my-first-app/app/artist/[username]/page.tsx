@@ -1,32 +1,3 @@
-// import Albums from './albums'
- 
-// async function getArtist(username: string) {
-//   const res = await fetch(`https://api.example.com/artist/${username}`)
-//   return res.json()
-// }
- 
-// async function getAlbums(username: string) {
-//   const res = await fetch(`https://api.example.com/artist/${username}/albums`)
-//   return res.json()
-// }
- 
-// export default async function Page({
-//   params,
-// }: {
-//   params: Promise<{ username: string }>
-// }) {
-//   const { username } = await params
- 
-//   // Initiate requests
-//   const artistData = getArtist(username)
-//   const albumsData = getAlbums(username)
- 
-//   const [artist, albums] = await Promise.all([artistData, albumsData])
- 
-//   return (
-//     <>
-//       <h1>{artist.name}</h1>
-//       <Albums list={albums} />
-//     </>
-//   )
-// }
+export default function Page({ params }: { params: { username: string } }) {
+  return <div>Artist: {params.username}</div>;
+}
