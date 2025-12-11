@@ -1,15 +1,19 @@
 // Client comp
+import './globals.css'
 import Search from '@/app/ui/search'
 // Server Comp
 import { Logo } from '@/app/logo'
 import type { Metadata } from 'next'
 
-import { Geist } from 'next/font/google'
+import { Inter } from 'next/font/google'
 
 import ThemeProvider from './theme-provider'
 
-const geist = Geist({
+// Using Google Font - no local files needed
+const geist = Inter({
   subsets: ['latin'],
+  variable: '--font-geist',
+  display: 'swap',
 })
 
 // const myFont = localFont({
