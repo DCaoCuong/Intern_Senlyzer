@@ -12,56 +12,67 @@ export function PostForm() {
     try {
       // Simulate form submission
       const title = formData.get('title')
-      const content = formData.get('content')
-      setMessage(`✓ Successfully created post: "${title}"`)
+      // const content = formData.get('content')
+      setMessage(`Successfully created post: "${title}"`)
       // Reset form
       const form = document.querySelector('form') as HTMLFormElement
       form?.reset()
       setTimeout(() => setMessage(''), 3000)
     } catch (error) {
-      setMessage('❌ Error creating post')
+      console.log(error)
+      setMessage('Error creating post')
     } finally {
       setIsLoading(false)
     }
   }
 
   return (
-    <form action={handleSubmit} className="space-y-4 p-6 bg-gray-50 rounded-lg border border-gray-200">
+    <form action={handleSubmit} className="space-y-5">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Tiêu đề: </label>
-        <input 
-          name="title" 
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          placeholder="Nhập tiêu đề bài viết" 
-          required 
+        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Tiêu đề</label>
+        <input
+          name="title"
+          className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all text-slate-900 dark:text-white placeholder:text-slate-400"
+          placeholder="Nhập tiêu đề ..."
+          required
           disabled={isLoading}
         />
       </div>
-      
+
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Nội dung: </label>
-        <textarea 
-          name="content" 
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          placeholder="Nhập nội dung bài viết" 
+        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Nội dung</label>
+        <textarea
+          name="content"
+          className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all text-slate-900 dark:text-white placeholder:text-slate-400 p-3"
+          placeholder="Nhập nội dung bài viết..."
           rows={4}
-          required 
+          required
           disabled={isLoading}
         />
       </div>
-      
-      <button 
+
+      <button
         type="submit"
         disabled={isLoading}
-        className="w-full px-4 py-3 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+        className="w-full px-4 py-3 bg-rose-500 hover:bg-rose-600 text-white font-medium rounded-lg shadow-sm hover:shadow-md disabled:bg-slate-300 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
       >
-        {isLoading ? '⏳ Đang tạo...' : '✨ Tạo bài viết'}
+        {isLoading ? (
+          <>
+            <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            <span>chờ xíu, đang tạo ...</span>
+          </>
+        ) : (
+          <>
+            <span>Tạo bài đăng</span>
+          </>
+        )}
       </button>
-      
+
       {message && (
-        <p className={`text-center py-2 rounded ${message.includes('✓') ? 'text-green-600 bg-green-50' : 'text-red-600 bg-red-50'}`}>
+        <div className={`p-4 rounded-lg flex items-center gap-3 text-sm font-medium animate-in fade-in slide-in-from-top-1 ${message.includes('Success') ? 'text-green-700 bg-green-50 border border-green-100' : 'text-red-700 bg-red-50 border border-red-100'}`}>
+          <span className="text-xl">{message.includes('Success') ? 'V ' : 'X '}</span>
           {message}
-        </p>
+        </div>
       )}
     </form>
   )

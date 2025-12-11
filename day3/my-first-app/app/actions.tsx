@@ -6,7 +6,7 @@ type FormState = {
   success: boolean
   message: string
 }
- 
+
 export async function createPost(
   prevState: FormState,
   formData: FormData
@@ -19,27 +19,27 @@ export async function createPost(
   } catch (error) {
     return {
       success: false,
-      message: 'Failed'
+      message: 'Failed roài '
     }
   }
 }
- 
+
 export async function exampleAction() {
   const cookieStore = await cookies()
- 
+
   // Get cookie
   cookieStore.get('name')?.value
- 
+
   // Set cookie
   cookieStore.set('name', 'Cuong DC')
- 
+
   // Delete cookie
   cookieStore.delete('name')
 }
 
 export async function incrementViews() {
   const cookieStore = await cookies()
-  const views = parseInt(cookieStore.get('views')?.value || '0', 10) + 1  
+  const views = parseInt(cookieStore.get('views')?.value || '0', 10) + 1
   cookieStore.set('views', views.toString())
   return views
 }

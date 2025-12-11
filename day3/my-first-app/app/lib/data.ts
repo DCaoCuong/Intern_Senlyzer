@@ -1,7 +1,6 @@
 // import { cache } from 'react'
-// import { db, posts, eq } from '@/lib/db'
 // import { cacheTag } from 'next/cache'
- 
+
 // export const getPost = cache(async (id: string) => {
 //   const post = await db.query.posts.findFirst({
 //     where: eq(posts.id, parseInt(id)),
@@ -24,20 +23,26 @@
 // export async function getProducts() {
 //   'use cache'
 //   cacheTag('products')
- 
+
 //   const products = await db.query('SELECT * FROM products')
 //   return products
 // }
 
-const posts = [
-  { id: 1, title: 'Bài viết 1', content: 'Nội dung 1' },
-  { id: 2, title: 'Bài viết 2', content: 'Nội dung 2' },
-]
+import { posts } from '@/app/lib/schema';
 
-export async function getPost(id: string) {
-  await new Promise(resolve => setTimeout(resolve, 1000)) //delay vài giây :))
-  return posts.find(p => p.id === parseInt(id))
-}
+import { db, eq } from '@/app/lib/db'
+import { cache } from 'react'
+
+// gọi 2 lần, nhưng chỉ chạy 1
+export const getPost = cache(async (slug: string) => {
+  const res = await db.query.posts.findFirst({ where: eq(posts.slug, slug) })
+  return res
+})
+
+// export async function getPost(id: string) {
+//   await new Promise(resolve => setTimeout(resolve, 1000)) //delay vài giây :))
+//   return posts.find(p => p.id === parseInt(id))
+// }
 
 export async function getProducts() {
   await new Promise(resolve => setTimeout(resolve, 1000))
@@ -56,4 +61,3 @@ export async function getItem(id: string) {
   await new Promise(resolve => setTimeout(resolve, 1000))
   return { id, name: `Item ${id}`, description: `diễn tả cho item ${id}` }
 }
-

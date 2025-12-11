@@ -1,5 +1,11 @@
 import { getItem, checkIsAvailable } from '@/app/lib/data'
- 
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Item Detail',
+  description: 'Xem chi tiết nàoo',
+}
+
 export default async function Page({
   params,
 }: {
@@ -10,17 +16,17 @@ export default async function Page({
   preload(id)
   // perform another asynchronous task
   const isAvailable = await checkIsAvailable()
- 
+
   return isAvailable ? <Item id={id} /> : null
 }
- 
+
 const preload = (id: string) => {
   void getItem(id)
 }
- 
+
 export async function Item({ id }: { id: string }) {
   const result = await getItem(id)
-  
+
   return (
     <div>
       <h1>Item: {id}</h1>

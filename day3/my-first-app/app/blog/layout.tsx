@@ -1,9 +1,8 @@
+import type { Metadata } from 'next'
 
-
-export default function BlogLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  return <section>{children}</section>
+export const metadata: Metadata = {
+  title: 'My 1st blog >',
+  description: 'This is my 1st blog balalalala',
 }
+
+export default function Layout() { }

@@ -14,7 +14,7 @@
 
 //with an ORM or database 
 // import { db, posts } from '@/lib/db'
- 
+
 // export default async function Page() {
 //   const allPosts = await db.select().from(posts)
 //   return (
@@ -35,7 +35,7 @@
 // export default function Page() {
 //   // Don't await the data fetching function
 //   const post = getPosts()
- 
+
 //   return (
 //     <Suspense fallback={<div>Loading...</div>}>
 //       <Post posts={post} />
@@ -48,18 +48,18 @@
 // import { Suspense } from 'react'
 // import useSWR from 'swr'
 // import Loading from './loading'
- 
+
 // const fetcher = (url) => fetch(url).then((r) => r.json())
- 
+
 // export default function BlogPage() {
 //   const { data, error, isLoading } = useSWR(
 //     'https://api.vercel.app/blog',
 //     fetcher
 //   )
- 
+
 //   if (isLoading) return <div>Loading...</div>
 //   if (error) return <div>Error: {error.message}</div>
- 
+
 //   return (
 //     <ul>
 //       {data.map((post: { id: string; title: string }) => (
@@ -68,6 +68,18 @@
 //     </ul>
 //   )
 // }
+
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Blog',
+  description: 'Đọc các bài viết về Next.js, React và web development',
+  keywords: ['Blog', 'Next.js', 'React', 'Web Development'],
+  openGraph: {
+    title: 'Blog - Senlyzer',
+    description: 'Bộ sưu tập bài viết về Next.js và React',
+  }
+}
 
 export async function generateStaticParams() {
   return [
@@ -82,7 +94,7 @@ export default async function Page({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  
+
   return (
     <div>
       <h1>Blog Post: {slug}</h1>
