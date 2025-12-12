@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+:root {
+  /* Modern Palette - Light Mode */
+  --background: #f8fafc;
+  /* Slate-50 */
+  --foreground: #0f172a;
+  /* Slate-900 */
+
+  --primary: #6366f1;
+  /* Indigo-500 */
+  --primary-foreground: #ffffff;
+
+  --secondary: #e2e8f0;
+  /* Slate-200 */
+  --secondary-foreground: #1e293b;
+  /* Slate-800 */
+
+  --accent: #8b5cf6;
+  /* Violet-500 */
+  --accent-foreground: #ffffff;
+
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #6366f1;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0f172a;
+    /* Slate-900 */
+    --foreground: #f8fafc;
+    /* Slate-50 */
+
+    --primary: #818cf8;
+    /* Indigo-400 */
+    --primary-foreground: #0f172a;
+
+    --secondary: #1e293b;
+    /* Slate-800 */
+    --secondary-foreground: #f8fafc;
+
+    --accent: #a78bfa;
+    /* Violet-400 */
+    --accent-foreground: #0f172a;
+
+    --card: #1e293b;
+    --card-foreground: #f8fafc;
+
+    --border: #334155;
+    --input: #334155;
+    --ring: #818cf8;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
