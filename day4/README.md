@@ -12,6 +12,9 @@
 
 6. Sử dụng Middleware để thêm Headers hoặc thực hiện logic Xác thực (Authentication) cơ bản (ví dụ: kiểm tra token) -->
 
+'' Dạ, hôm nay em chỉ thực hiện được 1 nữa theo WBD ạ
+'' Em sẽ bù vào ngày tiếp theo ạ.
+
 ### Thực hành: my-first-app project
 
-### Deploy: 
+### Deploy: https://intern-senlyzer-day4.vercel.app/
