@@ -15,3 +15,7 @@
 5. Thực hành Metadata tĩnh: Áp dụng metadata object hoặc file để định nghĩa các thông tin SEO tĩnh cho toàn bộ ứng dụng (layout.js) và từng trang cụ thể (page.js).
 
 6. Thực hành Metadata động: Học cách tạo hàm generateMetadata để xử lý các Dynamic Metadata (ví dụ: lấy tiêu đề từ slug của bài viết) dựa trên dữ liệu tìm nạp.
+
+### Thực hành: my-first-app project
+
+### Deploy: https://intern-senlyzer-day3.vercel.app/
