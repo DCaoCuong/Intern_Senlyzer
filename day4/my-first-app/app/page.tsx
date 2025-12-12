@@ -116,3 +116,7 @@ export default function Page() {
     </div>
   )
 }
+
+export async function POST(request: Request) {
+
+}

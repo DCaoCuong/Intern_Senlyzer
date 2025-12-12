@@ -10,3 +10,11 @@ export const posts = sqliteTable('posts', {
     image: text('image'),
     category: text('category'),
 });
+
+export const products = sqliteTable('products', {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    name: text('name').notNull(),
+    price: text('price').notNull(),
+    category: text('category'),
+});
+
