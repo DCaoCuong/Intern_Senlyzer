@@ -1,20 +1,16 @@
 ## Route Handlers & Middleware
 
-1. Tập trung vào Route Handlers, hiểu vai trò của chúng tương đương với API Routes trong Pages Router, dùng để xây dựng API backend cho ứng dụng full-stack.
+1. Nghiên cứu Middleware—một hàm cho phép chạy logic trước khi yêu cầu hoàn tất.
 
-2. Tìm hiểu cách Route Handlers được định nghĩa trong thư mục app/ và cấu trúc tệp cần thiết
+2. Áp dụng Middleware để Viết lại (Rewrite) yêu cầu (ví dụ: map URL nội bộ) và Chuyển hướng (Redirect) người dùng dựa trên điều kiện.
 
-3. Triển khai các Route Handler để xử lý các phương thức HTTP cơ bản như GET, POST, PUT, DELETE.
+3. Sử dụng Middleware để thêm Headers hoặc thực hiện logic Xác thực (Authentication) cơ bản (ví dụ: kiểm tra token)
 
-<!-- 4. Nghiên cứu Middleware—một hàm cho phép chạy logic trước khi yêu cầu hoàn tất.
+- Phần còn lại của ngày 4
 
-5. Áp dụng Middleware để Viết lại (Rewrite) yêu cầu (ví dụ: map URL nội bộ) và Chuyển hướng (Redirect) người dùng dựa trên điều kiện.
+## Configuration & Advanced Routing
 
-6. Sử dụng Middleware để thêm Headers hoặc thực hiện logic Xác thực (Authentication) cơ bản (ví dụ: kiểm tra token) -->
-
-'' Dạ, hôm nay em chỉ thực hiện được 1 nữa theo WBD ạ
-'' Em sẽ bù vào ngày tiếp theo ạ.
-
+1.
 ### Thực hành: my-first-app project
 
-### Deploy: https://intern-senlyzer-day4.vercel.app/
+### Deploy: 
