@@ -65,6 +65,15 @@ export default function Page() {
                   <Link href="/artist/drake" className="inline-flex items-center px-4 py-2 rounded-lg bg-pink-50 text-pink-700 hover:bg-pink-100 dark:bg-pink-900/30 dark:text-pink-300 dark:hover:bg-pink-900/50 transition-colors font-medium">
                     Artist Profile
                   </Link>
+                  <Link href="/premium" className="inline-flex items-center px-4 py-2 rounded-lg bg-purple-50 text-purple-700 hover:bg-purple-100 dark:bg-purple-900/30 dark:text-purple-300 dark:hover:bg-purple-900/50 transition-colors font-medium">
+                    Premium
+                  </Link>
+                  <Link href="/profile" className="inline-flex items-center px-4 py-2 rounded-lg bg-purple-50 text-purple-700 hover:bg-purple-100 dark:bg-purple-900/30 dark:text-purple-300 dark:hover:bg-purple-900/50 transition-colors font-medium">
+                    Profile
+                  </Link>
+                  <Link href="/public" className="inline-flex items-center px-4 py-2 rounded-lg bg-purple-50 text-purple-700 hover:bg-purple-100 dark:bg-purple-900/30 dark:text-purple-300 dark:hover:bg-purple-900/50 transition-colors font-medium">
+                    Public
+                  </Link>
                 </div>
               </div>
             </div>

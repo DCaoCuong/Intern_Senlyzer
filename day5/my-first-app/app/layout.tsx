@@ -45,7 +45,17 @@ const geist = Inter({
 //   ],
 // })
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout({
+  children,
+  analytics,
+  team,
+  notifications,
+}: {
+  children: React.ReactNode
+  analytics?: React.ReactNode
+  team?: React.ReactNode
+  notifications?: React.ReactNode
+}) {
   return (
     <html lang="en" className={geist.className}>
       <body className="bg-background text-foreground antialiased min-h-full flex flex-col">
@@ -65,6 +75,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
           <main className="flex-grow">
             {children}
+
+            {/* Parallel Routes Slots - Only render if they exist */}
+            {(analytics || team || notifications) && (
+              <div className="dashboard-grid max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                {analytics && <aside className="analytics-section">{analytics}</aside>}
+                {team && <main className="team-section">{team}</main>}
+                {notifications && <aside className="notifications-section">{notifications}</aside>}
+              </div>
+            )}
           </main>
 
           <footer className="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-8 mt-12">
