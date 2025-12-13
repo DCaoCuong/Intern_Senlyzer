@@ -26,4 +26,4 @@
 
 ### Thực hành: my-first-app project
 
-### Deploy: 
+### Deploy: https://intern-senlyzer-day5.vercel.app/
