@@ -5,4 +5,6 @@ export const metadata: Metadata = {
   description: 'This is my 1st blog balalalala',
 }
 
-export default function Layout() { }
+export default function Layout() {
+  return <div>Layout</div>
+}

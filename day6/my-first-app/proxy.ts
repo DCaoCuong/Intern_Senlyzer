@@ -233,6 +233,15 @@ export function proxy(request: NextRequest) {
     response.headers.set('X-App-Version', '1.0.0')
     response.headers.set('X-Request-Time', new Date().toISOString())
 
+    const nextUrl = request.nextUrl
+    if (nextUrl.pathname === '/dashboard') {
+        if (request.cookies.get('auth-token')) {
+            return NextResponse.rewrite(new URL('/auth/dashboard', request.url))
+        } else {
+            return NextResponse.rewrite(new URL('/public/dashboard', request.url))
+        }
+    }
+
     return response
 }
 

@@ -4,6 +4,8 @@ import { PostForm } from './ui/form'
 import ViewCount from './view-count'
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import CustomLink from './components/nav'
+import Form from './components/form'
 
 export const metadata: Metadata = {
   title: 'Trang Chủ',
@@ -34,6 +36,11 @@ export default function Page() {
               alt="Hackathon Event"
               width={1200}
               height={675}
+              quality={200}
+              // preload={false}
+              // loading="lazy"
+              // placeholder="blur"
+              // blurDataURL='...'
               className="w-full h-auto object-cover"
               priority
             />
@@ -56,7 +63,7 @@ export default function Page() {
                   <Link href="/blog" className="inline-flex items-center px-4 py-2 rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-300 dark:hover:bg-blue-900/50 transition-colors font-medium">
                     Blog Posts
                   </Link>
-                  <Link href="/dashboard" className="inline-flex items-center px-4 py-2 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-900/30 dark:text-emerald-300 dark:hover:bg-emerald-900/50 transition-colors font-medium">
+                  <Link href="/dashboard" scroll={false} replace={true} className="inline-flex items-center px-4 py-2 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-900/30 dark:text-emerald-300 dark:hover:bg-emerald-900/50 transition-colors font-medium">
                     Dashboard
                   </Link>
                   <Link href="/item/1" className="inline-flex items-center px-4 py-2 rounded-lg bg-violet-50 text-violet-700 hover:bg-violet-100 dark:bg-violet-900/30 dark:text-violet-300 dark:hover:bg-violet-900/50 transition-colors font-medium">
@@ -73,6 +80,9 @@ export default function Page() {
                   </Link>
                   <Link href="/public" className="inline-flex items-center px-4 py-2 rounded-lg bg-purple-50 text-purple-700 hover:bg-purple-100 dark:bg-purple-900/30 dark:text-purple-300 dark:hover:bg-purple-900/50 transition-colors font-medium">
                     Public
+                  </Link>
+                  <Link href="/about" className="inline-flex items-center px-4 py-2 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-900/30 dark:text-emerald-300 dark:hover:bg-emerald-900/50 transition-colors font-medium" replace>
+                    About ////
                   </Link>
                 </div>
               </div>
@@ -123,6 +133,7 @@ export default function Page() {
         </div>
       </div>
     </div>
+
   )
 }
 

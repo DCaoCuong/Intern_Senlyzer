@@ -243,3 +243,42 @@ module.exports = {
     styledComponents: true,
   },
 }
+
+// module.exports = {
+//   images: {
+//     localPatterns: [
+//       {
+//         pathname: '/public/**',
+//         search: '',
+//       },
+//     ],
+//     remotePatterns: [new URL('https://example.com/account123/**')],
+//   },
+// }
+
+// module.exports = {
+//   images: {
+//     remotePatterns: [
+//       {
+//         protocol: 'https',
+//         hostname: 'example.com',
+//         port: '',
+//         pathname: '/aloalo123123/**',
+//         search: '',
+//       },
+//     ],
+//   },
+// }
+
+// module.exports = {
+//   images: {
+//     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+//     minimumCacheTTL: 14400,
+//     disableStaticImages: true,
+//     maximumRedirects: 3,
+//     dangerouslyAllowLocalIP: false,
+//     dangerouslyAllowSVG: true,
+//     unoptimized: true,
+
+//   },
+// }
