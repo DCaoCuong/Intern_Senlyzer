@@ -27,7 +27,14 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
         openGraph: {
             title: title,
             description: desc,
-            images: [imageUrl],
+            images: [
+                {
+                    url: imageUrl,
+                    width: 1200,
+                    height: 630,
+                    alt: title,
+                },
+            ],
         },
         twitter: {
             card: "summary_large_image",
