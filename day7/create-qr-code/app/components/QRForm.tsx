@@ -28,7 +28,7 @@ export default function QRForm() {
         if (amount) params.set("amount", amount);
         if (description) params.set("description", description);
 
-        const shareUrl = `${window.location.origin}/view-qr?${params.toString()}`;
+        const shareUrl = `${window.location.origin}/share?${params.toString()}`;
         navigator.clipboard.writeText(shareUrl);
         alert("Đã copy");
     };
