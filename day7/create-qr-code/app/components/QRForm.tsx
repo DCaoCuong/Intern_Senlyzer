@@ -21,16 +21,42 @@ export default function QRForm() {
         return generateVietQRData(bankBin, accountNumber, amount, description);
     }, [bankBin, accountNumber, amount, description]);
 
-    const handleShare = () => {
+    const handleShare = async () => {
         const params = new URLSearchParams();
         if (bankBin) params.set("bankBin", bankBin);
         if (accountNumber) params.set("accountNumber", accountNumber);
         if (amount) params.set("amount", amount);
         if (description) params.set("description", description);
 
-        const shareUrl = `${window.location.origin}/share?${params.toString()}`;
-        navigator.clipboard.writeText(shareUrl);
-        alert("Đã copy");
+        const shareUrl = `${window.location.origin}/view-qr?${params.toString()}`;
+
+        try {
+            // Generate the QR code image data URL
+            const dataUrl = await QRCode.toDataURL(qrData, {
+                width: 500,
+                margin: 2,
+                color: {
+                    dark: "#000000",
+                    light: "#ffffff",
+                },
+            });
+
+            // Convert Data URL to Blob
+            const imgBlob = await fetch(dataUrl).then((r) => r.blob());
+            const textBlob = new Blob([shareUrl], { type: "text/plain" });
+
+            const item = new ClipboardItem({
+                "text/plain": textBlob,
+                "image/png": imgBlob,
+            });
+
+            await navigator.clipboard.write([item]);
+            alert("Đã copy!");
+        } catch (err) {
+            console.error("copy failed:", err);
+            navigator.clipboard.writeText(shareUrl);
+            alert("Đã copy link (Trình duyệt không hỗ trợ copy ảnh).");
+        }
     };
 
     const handleDownload = async () => {
