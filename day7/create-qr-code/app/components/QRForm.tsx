@@ -1,21 +1,37 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import BankSelect from "./BankSelect";
 import QRCodeDisplay from "./QRCodeDisplay";
 import { generateVietQRData } from "../lib/vietqr";
 import QRCode from "qrcode";
+import { useSearchParams, usePathname } from "next/navigation";
 
 export default function QRForm() {
-    const [bankBin, setBankBin] = useState("");
-    const [accountNumber, setAccountNumber] = useState("");
-    const [amount, setAmount] = useState("");
-    const [description, setDescription] = useState("");
+    const searchParams = useSearchParams();
+    const pathname = usePathname();
+
+    const [bankBin, setBankBin] = useState(searchParams.get("bankBin") || "");
+    const [accountNumber, setAccountNumber] = useState(searchParams.get("accountNumber") || "");
+    const [amount, setAmount] = useState(searchParams.get("amount") || "");
+    const [description, setDescription] = useState(searchParams.get("description") || "");
 
     const qrData = useMemo(() => {
         if (!bankBin || !accountNumber) return "";
         return generateVietQRData(bankBin, accountNumber, amount, description);
     }, [bankBin, accountNumber, amount, description]);
+
+    const handleShare = () => {
+        const params = new URLSearchParams();
+        if (bankBin) params.set("bankBin", bankBin);
+        if (accountNumber) params.set("accountNumber", accountNumber);
+        if (amount) params.set("amount", amount);
+        if (description) params.set("description", description);
+
+        const shareUrl = `${window.location.origin}/view-qr?${params.toString()}`;
+        navigator.clipboard.writeText(shareUrl);
+        alert("Đã copy");
+    };
 
     const handleDownload = async () => {
         if (!qrData) return;
@@ -30,7 +46,7 @@ export default function QRForm() {
             });
             const link = document.createElement("a");
             link.href = url;
-            link.download = "vietqr.png";
+            link.download = "your_qr_code_dcc.png";
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -94,12 +110,11 @@ export default function QRForm() {
                         placeholder="Nhập nội dung"
                     />
                 </div>
-
             </div>
 
             <div className="flex flex-col items-center justify-start pt-4">
                 <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
-                    QR đây - quẹt đi
+                    QR nè - quẹt đi
                 </h2>
                 {qrData ? (
                     <QRCodeDisplay data={qrData} />
@@ -112,7 +127,7 @@ export default function QRForm() {
                     <Button onClick={handleDownload} className="mr-2">Tải xuống QR</Button>
                     {qrData && (
                         <Button
-                            onClick={() => navigator.clipboard.writeText(qrData)}
+                            onClick={handleShare}
                             className="bg-blue-500 hover:bg-blue-600 text-white"
                         >
                             Copy URL QR
