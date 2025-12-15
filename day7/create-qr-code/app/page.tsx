@@ -1,4 +1,5 @@
 import QRForm from "./components/QRForm";
+import { Suspense } from "react";
 
 export default function Home() {
   return (
@@ -9,7 +10,9 @@ export default function Home() {
             Tạo QR Code
           </h1>
         </div>
-        <QRForm />
+        <Suspense fallback={<div>Loading...</div>}>
+          <QRForm />
+        </Suspense>
       </main>
     </div>
   );
