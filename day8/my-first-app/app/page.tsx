@@ -6,6 +6,8 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import CustomLink from './components/nav'
 import Form from './components/form'
+import { cookies, headers } from 'next/headers'
+import { Suspense } from 'react'
 
 export const metadata: Metadata = {
   title: 'Trang Chủ',
@@ -136,7 +138,4 @@ export default function Page() {
 
   )
 }
-
-export async function POST(request: Request) {
-
-}
+ 

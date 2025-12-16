@@ -27,6 +27,17 @@ sqlite.exec(`
   )
 `);
 
+sqlite.exec(`
+  CREATE TABLE IF NOT EXISTS preferences (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id TEXT NOT NULL,
+    theme TEXT DEFAULT 'light',
+    language TEXT DEFAULT 'en',
+    created_at INTEGER DEFAULT (strftime('%s', 'now')),
+    updated_at INTEGER DEFAULT (strftime('%s', 'now'))
+  )
+`);
+
 const countPost = sqlite.prepare('SELECT COUNT(*) as count FROM posts').get() as { count: number };
 if (countPost.count === 0) {
   sqlite.exec(`

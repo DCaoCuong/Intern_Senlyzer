@@ -1,4 +1,5 @@
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
+import { sql } from 'drizzle-orm';
+import { sqliteTable, text, integer} from 'drizzle-orm/sqlite-core';
 
 export const posts = sqliteTable('posts', {
     id: integer('id').primaryKey({ autoIncrement: true }),
@@ -18,3 +19,11 @@ export const products = sqliteTable('products', {
     category: text('category'),
 });
 
+export const preferences = sqliteTable('preferences', {
+  id: integer('id').primaryKey(),
+  userId: text('user_id').notNull(),          
+  theme: text('theme').default('light'),      
+  language: text('language').default('en'),   
+  createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`),
+});
