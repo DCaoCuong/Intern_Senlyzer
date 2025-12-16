@@ -31,7 +31,6 @@ export default function QRForm() {
         const shareUrl = `${window.location.origin}/view-qr?${params.toString()}`;
 
         try {
-            // Generate the QR code image data URL
             const dataUrl = await QRCode.toDataURL(qrData, {
                 width: 500,
                 margin: 2,
@@ -41,7 +40,6 @@ export default function QRForm() {
                 },
             });
 
-            // Convert Data URL to Blob
             const imgBlob = await fetch(dataUrl).then((r) => r.blob());
             const textBlob = new Blob([shareUrl], { type: "text/plain" });
 
