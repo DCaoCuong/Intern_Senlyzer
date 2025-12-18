@@ -12,7 +12,7 @@
 
 ### Thực hành: my-first-app project
 
-### Deploy: 
+### Deploy: https://intern-senlyzer-day7.vercel.app/
 
 
 
