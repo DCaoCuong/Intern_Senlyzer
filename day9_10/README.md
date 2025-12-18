@@ -12,7 +12,7 @@
 
 ### Thực hành: create-qr-code
 
-### Deploy: 
+### Deploy: https://intern-senlyzer-day10.vercel.app/
 
 
 
