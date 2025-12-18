@@ -16,4 +16,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             return !!auth
         },
     },
+    // Required for production deployment (Vercel)
+    trustHost: true,
 })
