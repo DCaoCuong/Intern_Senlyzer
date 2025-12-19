@@ -6,7 +6,7 @@
 
 ### Thực hành: create-qr-code
 
-### Deploy:
+### Deploy: intern-senlyzer-day11.vercel.app
 
 
 

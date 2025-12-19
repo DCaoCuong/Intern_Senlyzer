@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function CheckoutPage() {
     const [selectedPlan] = useState({
@@ -19,7 +20,77 @@ export default function CheckoutPage() {
         ],
     });
 
-    const [paymentMethod, setPaymentMethod] = useState<"card" | "paypal">("card");
+    const [paymentMethod, setPaymentMethod] = useState<"card" | "paypal" | "bank_transfer">("card");
+    const [paymentInfo, setPaymentInfo] = useState<any>(null);
+    const [isLoadingPayment, setIsLoadingPayment] = useState(false);
+    const [paymentStatus, setPaymentStatus] = useState<"pending" | "checking" | "completed">("pending");
+
+    // Generate payment info when bank transfer is selected
+    useEffect(() => {
+        if (paymentMethod === "bank_transfer" && !paymentInfo) {
+            generatePaymentInfo();
+        }
+    }, [paymentMethod]);
+
+    // Check payment status periodically
+    useEffect(() => {
+        if (paymentStatus === "checking") {
+            const interval = setInterval(() => {
+                checkPaymentStatus();
+            }, 3000); // Check every 3 seconds
+
+            return () => clearInterval(interval);
+        }
+    }, [paymentStatus]);
+
+    const generatePaymentInfo = async () => {
+        setIsLoadingPayment(true);
+        try {
+            // In a real app, you would call your API to generate payment info
+            // For now, we'll generate it client-side
+            const paymentCode = generatePaymentCode();
+            const amount = 50000; // Example: 50,000 VND
+            const accountNumber = process.env.NEXT_PUBLIC_SEPAY_ACCOUNT_NUMBER || "0123456789";
+            const accountName = process.env.NEXT_PUBLIC_SEPAY_ACCOUNT_NAME || "SENLYZER";
+            const bankBin = process.env.NEXT_PUBLIC_SEPAY_BANK_BIN || "970422";
+            const bankName = process.env.NEXT_PUBLIC_SEPAY_BANK_NAME || "MB Bank";
+
+            const content = `${paymentCode} Thanh toan goi Pro`;
+            const qrCodeUrl = `https://img.vietqr.io/image/${bankBin}-${accountNumber}-compact2.png?amount=${amount}&addInfo=${encodeURIComponent(content)}&accountName=${encodeURIComponent(accountName)}`;
+
+            setPaymentInfo({
+                paymentCode,
+                amount,
+                accountNumber,
+                accountName,
+                bankName,
+                content,
+                qrCodeUrl,
+            });
+        } catch (error) {
+            console.error("Error generating payment info:", error);
+        } finally {
+            setIsLoadingPayment(false);
+        }
+    };
+
+    const generatePaymentCode = () => {
+        const timestamp = Date.now().toString(36).toUpperCase();
+        const random = Math.random().toString(36).substring(2, 5).toUpperCase();
+        return `PAY${timestamp}${random}`;
+    };
+
+    const checkPaymentStatus = async () => {
+        // In a real app, you would call your API to check payment status
+        // For demo purposes, we'll simulate a random success after some time
+        console.log("Checking payment status...");
+    };
+
+    const copyToClipboard = (text: string) => {
+        navigator.clipboard.writeText(text);
+        // You could add a toast notification here
+        alert("Đã copy vào clipboard!");
+    };
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
@@ -123,6 +194,31 @@ export default function CheckoutPage() {
                                             <span className="font-semibold text-gray-900">PayPal</span>
                                         </div>
                                     </button>
+
+                                    {/* Bank Transfer */}
+                                    <button
+                                        onClick={() => setPaymentMethod("bank_transfer")}
+                                        className={`w-full flex items-center gap-4 p-4 rounded-xl border-2 transition-all ${paymentMethod === "bank_transfer"
+                                            ? "border-[#F37221] bg-orange-50"
+                                            : "border-gray-200 hover:border-gray-300"
+                                            }`}
+                                    >
+                                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${paymentMethod === "bank_transfer" ? "border-[#F37221]" : "border-gray-300"
+                                            }`}>
+                                            {paymentMethod === "bank_transfer" && (
+                                                <div className="w-3 h-3 rounded-full bg-[#F37221]" />
+                                            )}
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                            </svg>
+                                            <div className="text-left">
+                                                <span className="font-semibold text-gray-900 block">Chuyển khoản ngân hàng</span>
+                                                <span className="text-xs text-gray-500">Quét mã QR hoặc chuyển khoản thủ công</span>
+                                            </div>
+                                        </div>
+                                    </button>
                                 </div>
                             </div>
 
@@ -177,6 +273,144 @@ export default function CheckoutPage() {
                                             />
                                         </div>
                                     </div>
+                                </div>
+                            )}
+
+                            {/* Bank Transfer Details */}
+                            {paymentMethod === "bank_transfer" && (
+                                <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
+                                    <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                                        <svg className="w-6 h-6 text-[#F37221]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                                        </svg>
+                                        Thông tin chuyển khoản
+                                    </h2>
+
+                                    {isLoadingPayment ? (
+                                        <div className="flex items-center justify-center py-8">
+                                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#F37221]"></div>
+                                        </div>
+                                    ) : paymentInfo ? (
+                                        <div className="space-y-4">
+                                            {/* QR Code */}
+                                            <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-6 border border-[#F37221]/20">
+                                                <div className="flex flex-col items-center">
+                                                    <Image
+                                                        src={paymentInfo.qrCodeUrl}
+                                                        alt="QR Code thanh toán"
+                                                        width={250}
+                                                        height={250}
+                                                        className="rounded-lg bg-white p-2"
+                                                        unoptimized
+                                                    />
+                                                    <p className="text-sm text-gray-600 mt-3 text-center">
+                                                        Quét mã QR bằng app ngân hàng để thanh toán
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            {/* Payment Details */}
+                                            <div className="space-y-3">
+                                                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                                    <span className="text-sm font-medium text-gray-600">Ngân hàng</span>
+                                                    <span className="text-sm font-bold text-gray-900">{paymentInfo.bankName}</span>
+                                                </div>
+
+                                                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                                    <span className="text-sm font-medium text-gray-600">Số tài khoản</span>
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="text-sm font-mono font-bold text-gray-900">{paymentInfo.accountNumber}</span>
+                                                        <button
+                                                            onClick={() => copyToClipboard(paymentInfo.accountNumber)}
+                                                            className="text-[#F37221] hover:text-[#d96316] transition-colors"
+                                                        >
+                                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                                    <span className="text-sm font-medium text-gray-600">Chủ tài khoản</span>
+                                                    <span className="text-sm font-bold text-gray-900">{paymentInfo.accountName}</span>
+                                                </div>
+
+                                                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                                    <span className="text-sm font-medium text-gray-600">Số tiền</span>
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="text-sm font-bold text-[#F37221]">
+                                                            {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(paymentInfo.amount)}
+                                                        </span>
+                                                        <button
+                                                            onClick={() => copyToClipboard(paymentInfo.amount.toString())}
+                                                            className="text-[#F37221] hover:text-[#d96316] transition-colors"
+                                                        >
+                                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <div className="flex items-start justify-between p-3 bg-orange-50 border border-[#F37221]/20 rounded-lg">
+                                                    <span className="text-sm font-medium text-gray-600">Nội dung CK</span>
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="text-sm font-mono font-bold text-[#F37221] text-right">{paymentInfo.content}</span>
+                                                        <button
+                                                            onClick={() => copyToClipboard(paymentInfo.content)}
+                                                            className="text-[#F37221] hover:text-[#d96316] transition-colors flex-shrink-0"
+                                                        >
+                                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* Important Note */}
+                                            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                                                <div className="flex gap-3">
+                                                    <svg className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                                    </svg>
+                                                    <div className="text-sm text-yellow-800">
+                                                        <p className="font-semibold mb-1">Lưu ý quan trọng:</p>
+                                                        <ul className="list-disc list-inside space-y-1">
+                                                            <li>Chuyển khoản <strong>đúng số tiền</strong> và <strong>đúng nội dung</strong></li>
+                                                            <li>Hệ thống sẽ tự động xác nhận thanh toán sau khi nhận được tiền</li>
+                                                            <li>Thời gian xử lý: 1-5 phút</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* Check Payment Button */}
+                                            {paymentStatus === "pending" && (
+                                                <button
+                                                    onClick={() => setPaymentStatus("checking")}
+                                                    className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 px-6 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 border border-gray-300"
+                                                >
+                                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                                                    </svg>
+                                                    Tôi đã chuyển khoản
+                                                </button>
+                                            )}
+
+                                            {paymentStatus === "checking" && (
+                                                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
+                                                        <span className="text-sm font-medium text-blue-800">
+                                                            Đang kiểm tra thanh toán...
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    ) : null}
                                 </div>
                             )}
                         </div>
