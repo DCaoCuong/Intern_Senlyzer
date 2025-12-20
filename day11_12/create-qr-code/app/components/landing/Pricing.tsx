@@ -1,6 +1,8 @@
 import Link from "next/link";
+import { auth } from "../../../auth";
 
-export default function Pricing() {
+export default async function Pricing() {
+    const session = await auth();
     const plans = [
         {
             name: "Starter",
@@ -15,8 +17,8 @@ export default function Pricing() {
                 "PNG download",
                 "Community support",
             ],
-            cta: "Get started",
-            href: "/auth/signin",
+            cta: session ? "Go to Dashboard" : "Get started",
+            href: session ? "/dashboard" : "/auth/signin",
             popular: false,
         },
         {
@@ -34,8 +36,8 @@ export default function Pricing() {
                 "Priority support",
                 "API access",
             ],
-            cta: "Get started",
-            href: "/checkout",
+            cta: session ? "Get started" : "Login to upgrade",
+            href: "/checkout?plan=pro",
             popular: true,
         },
         {
@@ -53,8 +55,8 @@ export default function Pricing() {
                 "White-label options",
                 "Dedicated support",
             ],
-            cta: "Get started",
-            href: "/checkout",
+            cta: session ? "Get started" : "Login to upgrade",
+            href: "/checkout?plan=business",
             popular: false,
         },
         {
@@ -73,7 +75,7 @@ export default function Pricing() {
                 "Custom billing",
             ],
             cta: "Contact sales",
-            href: "#",
+            href: "mailto:doancaocuongvn@gmail.com?subject=Enterprise%20Plan%20Inquiry",
             popular: false,
         },
     ];

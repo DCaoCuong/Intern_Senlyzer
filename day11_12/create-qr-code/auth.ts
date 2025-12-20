@@ -12,8 +12,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         signIn: '/auth/signin',
     },
     callbacks: {
-        authorized: async ({ auth }) => {
-            return !!auth
+        authorized: async ({ auth, request: { nextUrl } }) => {
+            const isLoggedIn = !!auth;
+            const isProtected = nextUrl.pathname.startsWith("/checkout") || nextUrl.pathname.startsWith("/dashboard");
+
+            if (isProtected) {
+                if (isLoggedIn) return true;
+                return false; // Redirect unauthenticated users to login page
+            }
+            return true;
         },
     },
     trustHost: true,

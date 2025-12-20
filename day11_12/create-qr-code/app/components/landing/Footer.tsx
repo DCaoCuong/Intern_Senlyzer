@@ -6,7 +6,7 @@ export default function Footer() {
             <div className="container mx-auto px-10 py-6">
                 <div className="flex items-center justify-center">
                     <p className="text-sm text-gray-600">
-                        © {currentYear} QR Bank - DCC.
+                        © {currentYear} QR Bank Code - DCC.
                     </p>
                 </div>
             </div>
