@@ -19,18 +19,24 @@ export async function POST(request: NextRequest) {
         await dbConnect();
 
         // 1. Parse request body
-        const payload: SePayWebhookPayload = await request.json();
+        const body = await request.json();
+        const payload: SePayWebhookPayload = {
+            id: body.id,
+            gateway: body.gateway,
+            transaction_date: body.transactionDate,
+            account_number: body.accountNumber,
+            sub_account: body.subAccount,
+            amount_in: body.transferAmount,
+            amount_out: 0,
+            accumulated: 0,
+            code: null,
+            transaction_content: body.transferContent || body.content,
+            reference_number: body.referenceCode,
+            body: body.description,
+        };
 
         // LOG ALL HITS TO DB FOR DIAGNOSTICS
         await WebhookLog.create({ body: payload });
-
-        console.log('📨 Received SePay webhook:', {
-            id: payload.id,
-            gateway: payload.gateway,
-            amount: payload.amount_in,
-            content: payload.transaction_content,
-            date: payload.transaction_date,
-        });
 
         // 2. Validate webhook payload
         if (!validateWebhookPayload(payload)) {
@@ -108,7 +114,7 @@ export async function POST(request: NextRequest) {
         );
 
     } catch (error) {
-        console.error('💥 Error processing webhook:', error);
+        console.error(' Error processing webhook:', error);
 
         // Return 500 để SePay retry
         return NextResponse.json(
@@ -161,7 +167,7 @@ async function processPayment(data: {
         );
 
         if (!payment) {
-            console.error('[Webhook] ❌ Payment record not found in DB for code:', data.paymentCode.toUpperCase());
+            console.error('[Webhook] Payment record not found in DB for code:', data.paymentCode.toUpperCase());
             // Vẫn nên đánh dấu là xong để tránh loop, hoặc throw tùy logic
             return;
         }
@@ -184,10 +190,10 @@ async function processPayment(data: {
             }
         );
 
-        console.log(`✅ Payment & User updated: ${payment.userId} is now ${plan} with ${qrLimit} limit`);
+        console.log(` Payment & User updated: ${payment.userId} is now ${plan} with ${qrLimit} limit`);
 
     } catch (error) {
-        console.error('❌ Error in processPayment DB logic:', error);
+        console.error(' Error in processPayment DB logic:', error);
         throw error; // Rethrow để webhook có thể retry
     }
 }
