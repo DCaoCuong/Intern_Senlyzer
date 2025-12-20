@@ -21,7 +21,6 @@ export async function POST(request: NextRequest) {
             { upsert: true, new: true }
         );
 
-        // Create payment record
         const payment = await Payment.create({
             paymentCode,
             userId: session.user.email,
@@ -30,9 +29,11 @@ export async function POST(request: NextRequest) {
             status: "pending",
         });
 
+        console.log(`[PaymentCreate] Successfully created intent: ${paymentCode} for ${session.user.email}`);
+
         return NextResponse.json({ success: true, payment });
     } catch (error: any) {
-        console.error("Error creating payment intent:", error);
+        console.error("[PaymentCreate] Error creating payment intent:", error);
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
