@@ -73,7 +73,7 @@ function CheckoutContent() {
             const bankBin = process.env.NEXT_PUBLIC_SEPAY_BANK_BIN || "970418";
             const bankName = process.env.NEXT_PUBLIC_SEPAY_BANK_NAME || "BIDV";
 
-            const content = `${paymentCode} Thanh toan goi ${selectedPlan.name}`;
+            const content = `${paymentCode} Payment call ${selectedPlan.name}`;
             const qrCodeUrl = `https://img.vietqr.io/image/${bankBin}-${accountNumber}-compact2.png?amount=${amount}&addInfo=${encodeURIComponent(content)}&accountName=${encodeURIComponent(accountName)}`;
 
             setPaymentInfo({
@@ -84,6 +84,17 @@ function CheckoutContent() {
                 bankName,
                 content,
                 qrCodeUrl,
+            });
+
+            // Sau khi tạo mã frontend, lưu vào DB làm "Intent"
+            await fetch('/api/payments/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    paymentCode,
+                    amount,
+                    plan: selectedPlan.id
+                })
             });
         } catch (error) {
             console.error("Error generating payment info:", error);
@@ -117,7 +128,6 @@ function CheckoutContent() {
 
     const copyToClipboard = (text: string) => {
         navigator.clipboard.writeText(text);
-        // You could add a toast notification here
         alert("Đã copy vào clipboard!");
     };
 

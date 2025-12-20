@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: "Missing payment code" }, { status: 400 });
     }
 
-    const status = getPaymentStatus(code);
+    const status = await getPaymentStatus(code);
 
     return NextResponse.json({
         code,
