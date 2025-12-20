@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/app/lib/mongodb';
-import { Payment, User } from '@/app/lib/models';
+import { Payment, User, WebhookLog } from '@/app/lib/models';
 import { SePayWebhookPayload } from '@/app/lib/sepay.types';
 import {
     validateWebhookPayload,
@@ -16,8 +16,13 @@ const processedTransactions = new Set<number>();
 
 export async function POST(request: NextRequest) {
     try {
+        await dbConnect();
+
         // 1. Parse request body
         const payload: SePayWebhookPayload = await request.json();
+
+        // LOG ALL HITS TO DB FOR DIAGNOSTICS
+        await WebhookLog.create({ body: payload });
 
         console.log('📨 Received SePay webhook:', {
             id: payload.id,
@@ -138,12 +143,13 @@ async function processPayment(data: {
     transactionDate: string;
     transactionContent: string;
 }) {
-    console.log('🔄 Processing payment in DB:', data);
+    console.log('[Webhook] Processing payment in DB:', data.paymentCode);
 
     try {
         await dbConnect();
 
         // 1. Cập nhật trạng thái Payment
+        console.log(`[Webhook] Updating payment record for: ${data.paymentCode.toUpperCase()}`);
         const payment = await Payment.findOneAndUpdate(
             { paymentCode: data.paymentCode.toUpperCase() },
             {
@@ -155,10 +161,12 @@ async function processPayment(data: {
         );
 
         if (!payment) {
-            console.error('❌ Payment record not found for code:', data.paymentCode);
+            console.error('[Webhook] ❌ Payment record not found in DB for code:', data.paymentCode.toUpperCase());
             // Vẫn nên đánh dấu là xong để tránh loop, hoặc throw tùy logic
             return;
         }
+
+        console.log(`[Webhook] Found payment for user: ${payment.userId}. Updating subscription to ${payment.plan}`);
 
         // 2. Cập nhật thông tin User (Subscription & Lượt dùng)
         const plan = payment.plan;

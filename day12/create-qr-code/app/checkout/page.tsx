@@ -55,7 +55,16 @@ function CheckoutContent() {
     // Check payment status periodically
     useEffect(() => {
         if (paymentStatus === "checking") {
+            const startTime = Date.now();
             const interval = setInterval(() => {
+                // Tự động dừng sau 10 phút nếu không có phản hồi
+                if (Date.now() - startTime > 10 * 60 * 1000) {
+                    console.warn("Polling timeout reached.");
+                    clearInterval(interval);
+                    setPaymentStatus("pending");
+                    alert("Thời gian kiểm tra quá lâu. Vui lòng thử lại hoặc liên hệ hỗ trợ nếu bạn đã chuyển tiền.");
+                    return;
+                }
                 checkPaymentStatus();
             }, 3000); // Check every 3 seconds
 
@@ -68,10 +77,10 @@ function CheckoutContent() {
         try {
             const paymentCode = generatePaymentCode();
             const amount = selectedPlan.amountVnd;
-            const accountNumber = process.env.NEXT_PUBLIC_SEPAY_ACCOUNT_NUMBER || "5602000442";
-            const accountName = process.env.NEXT_PUBLIC_SEPAY_ACCOUNT_NAME || "CAO DINH THANH";
-            const bankBin = process.env.NEXT_PUBLIC_SEPAY_BANK_BIN || "970418";
-            const bankName = process.env.NEXT_PUBLIC_SEPAY_BANK_NAME || "BIDV";
+            const accountNumber = process.env.NEXT_PUBLIC_SEPAY_ACCOUNT_NUMBER || "105877455716";
+            const accountName = process.env.NEXT_PUBLIC_SEPAY_ACCOUNT_NAME || "DOAN CAO CUONG";
+            const bankBin = process.env.NEXT_PUBLIC_SEPAY_BANK_BIN || "970415";
+            const bankName = process.env.NEXT_PUBLIC_SEPAY_BANK_NAME || "Vietinbank";
 
             const content = `${paymentCode} Payment call ${selectedPlan.name}`;
             const qrCodeUrl = `https://img.vietqr.io/image/${bankBin}-${accountNumber}-compact2.png?amount=${amount}&addInfo=${encodeURIComponent(content)}&accountName=${encodeURIComponent(accountName)}`;
@@ -87,7 +96,8 @@ function CheckoutContent() {
             });
 
             // Sau khi tạo mã frontend, lưu vào DB làm "Intent"
-            await fetch('/api/payments/create', {
+            console.log("Saving payment intent to DB...");
+            const intentRes = await fetch('/api/payments/create', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -96,6 +106,14 @@ function CheckoutContent() {
                     plan: selectedPlan.id
                 })
             });
+
+            if (!intentRes.ok) {
+                const errorData = await intentRes.json();
+                console.error("Failed to create payment intent:", errorData);
+                // alert("Cảnh báo: Không thể khởi tạo giao dịch trong hệ thống. Vui lòng refresh trang.");
+            } else {
+                console.log("Payment intent saved successfully.");
+            }
         } catch (error) {
             console.error("Error generating payment info:", error);
         } finally {

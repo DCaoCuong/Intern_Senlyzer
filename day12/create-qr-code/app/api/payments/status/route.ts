@@ -9,7 +9,9 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: "Missing payment code" }, { status: 400 });
     }
 
+    console.log(`[PaymentStatusCheck] Checking code: ${code}`);
     const status = await getPaymentStatus(code);
+    console.log(`[PaymentStatusCheck] Result for ${code}: ${status}`);
 
     return NextResponse.json({
         code,

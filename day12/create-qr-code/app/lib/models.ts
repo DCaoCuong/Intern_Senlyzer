@@ -38,5 +38,15 @@ const PaymentSchema: Schema = new Schema({
     referenceNumber: { type: String },
 }, { timestamps: true });
 
+export interface IWebhookLog extends Document {
+    body: any;
+    receivedAt: Date;
+}
+
+const WebhookLogSchema: Schema = new Schema({
+    body: { type: Schema.Types.Mixed },
+}, { timestamps: { createdAt: 'receivedAt', updatedAt: false } });
+
 export const User = mongoose.models.User || mongoose.model<IUser>("User", UserSchema);
 export const Payment = mongoose.models.Payment || mongoose.model<IPayment>("Payment", PaymentSchema);
+export const WebhookLog = mongoose.models.WebhookLog || mongoose.model<IWebhookLog>("WebhookLog", WebhookLogSchema);
