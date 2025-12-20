@@ -16,9 +16,7 @@ const PLANS: Record<string, any> = {
         discount: "50% OFF",
         features: [
             "1,000 QR generations/month",
-            "Custom branded QR codes",
-            "PNG & SVG formats",
-            "Priority support",
+            "Unlimited type of bank QR code",
             "API access",
         ],
     },
@@ -101,7 +99,20 @@ function CheckoutContent() {
     };
 
     const checkPaymentStatus = async () => {
-        console.log("Checking payment status...");
+        if (!paymentInfo) return;
+
+        try {
+            console.log("Checking payment status for:", paymentInfo.paymentCode);
+            const res = await fetch(`/api/payments/status?code=${paymentInfo.paymentCode}`);
+            const data = await res.json();
+
+            if (data.status === "completed") {
+                setPaymentStatus("completed");
+                console.log("Payment completed!");
+            }
+        } catch (error) {
+            console.error("Error checking payment status:", error);
+        }
     };
 
     const copyToClipboard = (text: string) => {

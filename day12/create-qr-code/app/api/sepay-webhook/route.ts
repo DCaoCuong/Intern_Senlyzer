@@ -7,6 +7,9 @@ import {
     extractPaymentCode,
 } from '@/app/lib/sepay';
 
+import { updatePaymentStatus } from '@/app/lib/payment-store';
+import { PaymentStatus } from '@/app/lib/sepay.types';
+
 const processedTransactions = new Set<number>();
 
 export async function POST(request: NextRequest) {
@@ -70,14 +73,6 @@ export async function POST(request: NextRequest) {
         });
 
         // 7. Xử lý thanh toán
-        // TODO: Ở đây bạn cần implement logic xử lý thanh toán
-        // Ví dụ:
-        // - Tìm đơn hàng theo paymentCode
-        // - Kiểm tra số tiền có khớp không
-        // - Cập nhật trạng thái đơn hàng
-        // - Gửi notification cho user
-        // - Lưu vào database
-
         await processPayment({
             paymentCode,
             amount,
@@ -143,36 +138,12 @@ async function processPayment(data: {
 }) {
     console.log('🔄 Processing payment:', data);
 
-    // TODO: Implement your business logic here
-    // Ví dụ:
+    // TODO: Implement your business logic here (Save to DB, etc.)
 
-    // 1. Tìm đơn hàng/order bằng paymentCode
-    // const order = await db.order.findOne({ paymentCode: data.paymentCode });
+    // Cập nhật trạng thái vào in-memory store để frontend có thể poll
+    updatePaymentStatus(data.paymentCode, PaymentStatus.COMPLETED);
 
-    // 2. Validate số tiền
-    // if (order.amount !== data.amount) {
-    //   throw new Error('Amount mismatch');
-    // }
-
-    // 3. Cập nhật trạng thái đơn hàng
-    // await db.order.update({
-    //   where: { id: order.id },
-    //   data: {
-    //     status: 'COMPLETED',
-    //     paidAt: new Date(),
-    //     sePayTransactionId: data.sePayTransactionId,
-    //     referenceNumber: data.referenceNumber,
-    //   }
-    // });
-
-    // 4. Gửi email/notification cho user
-    // await sendPaymentSuccessEmail(order.userEmail, order);
-
-    // 5. Trigger các action khác (unlock content, activate service, etc.)
-    // await activateUserSubscription(order.userId, order.plan);
-
-    // Tạm thời chỉ log ra
-    console.log('✅ Payment processed successfully for code:', data.paymentCode);
+    console.log('✅ Payment marked as COMPLETED for code:', data.paymentCode);
 
     // Simulate async operation
     await new Promise(resolve => setTimeout(resolve, 100));
