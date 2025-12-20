@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import dbConnect from '@/app/lib/mongodb';
+import { Payment, User } from '@/app/lib/models';
 import { SePayWebhookPayload } from '@/app/lib/sepay.types';
 import {
     validateWebhookPayload,
@@ -136,15 +138,48 @@ async function processPayment(data: {
     transactionDate: string;
     transactionContent: string;
 }) {
-    console.log('🔄 Processing payment:', data);
+    console.log('🔄 Processing payment in DB:', data);
 
-    // TODO: Implement your business logic here (Save to DB, etc.)
+    try {
+        await dbConnect();
 
-    // Cập nhật trạng thái vào in-memory store để frontend có thể poll
-    updatePaymentStatus(data.paymentCode, PaymentStatus.COMPLETED);
+        // 1. Cập nhật trạng thái Payment
+        const payment = await Payment.findOneAndUpdate(
+            { paymentCode: data.paymentCode.toUpperCase() },
+            {
+                status: 'completed',
+                sePayTransactionId: data.sePayTransactionId,
+                referenceNumber: data.referenceNumber
+            },
+            { new: true }
+        );
 
-    console.log('✅ Payment marked as COMPLETED for code:', data.paymentCode);
+        if (!payment) {
+            console.error('❌ Payment record not found for code:', data.paymentCode);
+            // Vẫn nên đánh dấu là xong để tránh loop, hoặc throw tùy logic
+            return;
+        }
 
-    // Simulate async operation
-    await new Promise(resolve => setTimeout(resolve, 100));
+        // 2. Cập nhật thông tin User (Subscription & Lượt dùng)
+        const plan = payment.plan;
+        let qrLimit = 10; // Free
+        if (plan === 'pro') qrLimit = 1000;
+        if (plan === 'business') qrLimit = 10000;
+
+        await User.findOneAndUpdate(
+            { email: payment.userId },
+            {
+                subscriptionStatus: plan,
+                qrLimit: qrLimit,
+                // Có thể reset qrUsageCount nếu là nâng cấp mới
+                lastPaymentId: payment._id
+            }
+        );
+
+        console.log(`✅ Payment & User updated: ${payment.userId} is now ${plan} with ${qrLimit} limit`);
+
+    } catch (error) {
+        console.error('❌ Error in processPayment DB logic:', error);
+        throw error; // Rethrow để webhook có thể retry
+    }
 }

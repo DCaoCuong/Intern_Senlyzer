@@ -1,12 +1,23 @@
+import dbConnect from './mongodb';
+import { Payment } from './models';
 import { PaymentStatus } from './sepay.types';
 
-const paymentStore = new Map<string, PaymentStatus>();
+export const updatePaymentStatus = async (paymentCode: string, status: PaymentStatus, extraData: any = {}) => {
+    await dbConnect();
+    console.log(`[PaymentStore] Updating DB: ${paymentCode} to ${status}`);
 
-export const updatePaymentStatus = (paymentCode: string, status: PaymentStatus) => {
-    console.log(`[PaymentStore] Updating ${paymentCode} to ${status}`);
-    paymentStore.set(paymentCode.toUpperCase(), status);
+    await Payment.findOneAndUpdate(
+        { paymentCode: paymentCode.toUpperCase() },
+        {
+            status: status as any,
+            ...extraData
+        },
+        { upsert: true, new: true }
+    );
 };
 
-export const getPaymentStatus = (paymentCode: string): PaymentStatus => {
-    return paymentStore.get(paymentCode.toUpperCase()) || PaymentStatus.PENDING;
+export const getPaymentStatus = async (paymentCode: string): Promise<PaymentStatus> => {
+    await dbConnect();
+    const payment = await Payment.findOne({ paymentCode: paymentCode.toUpperCase() });
+    return (payment?.status as PaymentStatus) || PaymentStatus.PENDING;
 };
